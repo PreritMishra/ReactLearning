@@ -3,15 +3,13 @@ import { restaurantList } from "../config";
 import RestaurantCard from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import { filterData } from "../utils/helper";
+import useOnline from "../utils/useOnline";
 
 //What is state?
 //What is hooks?
 //What is useState
 
-function filterData(searchText, restaurants) {
-    return restaurants.filter((restaurant) => restaurant?.data?.name?.toLowerCase()?.includes(searchText.toLowerCase()))
-
-}
 //hooks A normal js function coming from react library
 const Body = () => {
     const [allRestaurants, setAllRestaurants] = useState([]);
@@ -33,10 +31,15 @@ const Body = () => {
         setAllRestaurants(json?.data?.cards[2]?.data?.data?.cards);
         setFilteredRestaurants(json?.data?.cards[2]?.data?.data?.cards);
     }
-    console.log("render")
+    //console.log("render")
     //conditional rendering
     //if restaurant is empty => shimmer UI
     //if restaurant has data => actual data UI
+
+    const isOnline = useOnline();
+    if(!isOnline){
+        return <h1>Offline!!! Please check your internet connection</h1>
+    }
     
     if(!allRestaurants) return null; // Avoid rendering (not render component (early return))
 
